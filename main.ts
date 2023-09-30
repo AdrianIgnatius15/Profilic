@@ -1,6 +1,7 @@
 import express, { Express, Request, Response }  from "express";
 import { appRouter } from "./app/controllers/routers/appRouter";
 import { InitialiseAppComponents } from "./app/config/initialiseAppComponents";
+import 'reflect-metadata';
 
 export const app : Express = express();
 const initialiseDatabase = new InitialiseAppComponents();

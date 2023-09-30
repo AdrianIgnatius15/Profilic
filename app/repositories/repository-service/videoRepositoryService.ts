@@ -1,23 +1,35 @@
-import { VideoInput, VideoOutput } from "../../models/interfaces/video-input-output-model";
-import { GetAllVideosFilter } from "../filters/filters.types";
-import * as VideoRepository from '../repository/video-repository';
+import { Inject, Service } from "typedi";
+import Video from "../../models/entities/video";
+import { VideoRepository } from "../repository/video-repository";
+import { VideoInput } from "../../models/interfaces/video-input-output-model";
+import { VideoCreateDto } from "../../models/dtos/videoCreateDto";
 
-export const createVideo = (payload: VideoInput) : Promise<VideoOutput> => {
-    return VideoRepository.create(payload);
-};
+@Service()
+export class VideoRepositoryService {
+    constructor(
+        @Inject()
+        private videoRepository : VideoRepository
+    ) {}
 
-export const updateVideo = (id: number, payload : Partial<VideoOutput>) : Promise<VideoOutput> => {
-    return VideoRepository.update(id, payload);
-};
+    async getVideoByID(id : number) : Promise<Video> {
+        const video = await this.videoRepository.getByVideoById(id);
 
-export const getVideoById = (id: number) : Promise<VideoOutput> => {
-    return VideoRepository.getById(id);
+        return video
+    }
+
+    async getAllVideos() : Promise<Video[]> {
+        const videos = await this.videoRepository.getAllVideos();
+
+        return videos;
+    }
+
+    async createVideo(video : VideoCreateDto) : Promise<Video> {
+        const createVideoResult = await this.videoRepository.createVideo(video);
+        
+        return createVideoResult;
+    }
+
+    async updateVideo(id : number, updatedVideo : Partial<Video>) : Promise<Video> {
+        return await this.videoRepository.updateVideo(id, updatedVideo);
+    }
 }
-
-export const deleteVideoById = (id : number) : Promise<boolean> => {
-    return VideoRepository.deleteById(id);
-};
-
-export const getAllVideos = (filters: GetAllVideosFilter) : Promise<VideoOutput[]> => {
-    return VideoRepository.getAll(filters);
-};
