@@ -30,6 +30,16 @@ VideoController.get("/:id", async (request : Request, response : Response<VideoO
     return response.status(200).json(result);
 });
 
+VideoController.get("/", async (request : Request, response : Response<VideoOutput[]>) => {
+    const videos = await videoRepositoryInstance.getAllVideos();
+
+    if(videos.length >= 1) {
+        return response.status(200).json(videos);
+    } else {
+        return response.status(404).json([]);
+    }
+});
+
 VideoController.put("/:id", () => {
     // create a video, probably adding uploading as well
     

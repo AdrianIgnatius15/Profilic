@@ -44,7 +44,7 @@ export class VideoRepository {
     }
 
     public async getAllVideos(filters? : GetAllVideosFilter) : Promise<Video[]> {
-        return Video.findAll({
+        return await Video.findAll({
             where: {
                 ...filters?.isDeleted && { deletedAt: { [Op.not]: null } }
             },
