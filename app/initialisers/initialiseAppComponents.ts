@@ -1,6 +1,6 @@
 import { createMap } from "@automapper/core";
 import { DatabaseConnection } from "../database/databaseConnection";
-import { mapper } from "./mapper-middleware";
+import { mapper } from "../middlewares/mapper-middleware";
 import VideoReadDto from "../models/dtos/videoReadDto";
 import Video from "../models/entities/video";
 import { Service } from "typedi";
