@@ -1,8 +1,9 @@
 import { Inject, Service } from "typedi";
 import Video from "../../models/entities/video";
 import { VideoRepository } from "../repository/video-repository";
-import { VideoInput } from "../../models/interfaces/video-input-output-model";
 import { VideoCreateDto } from "../../models/dtos/videoCreateDto";
+import { mapper } from "../../middlewares/mapper-middleware";
+import VideoReadDto from "../../models/dtos/videoReadDto";
 
 @Service()
 export class VideoRepositoryService {
@@ -17,14 +18,15 @@ export class VideoRepositoryService {
         return video
     }
 
-    async getAllVideos() : Promise<Video[]> {
+    async getAllVideos() : Promise<VideoReadDto[]> {
         const videos = await this.videoRepository.getAllVideos();
+        const videoReadDtos = mapper.mapArray(videos, Video, VideoReadDto);
 
-        return videos;
+        return videoReadDtos;
     }
 
-    async createVideo(video : VideoCreateDto) : Promise<Video> {
-        const createVideoResult = await this.videoRepository.createVideo(video);
+    async createVideo(videoCreateDto : VideoCreateDto) : Promise<Video> {
+        const createVideoResult = await this.videoRepository.createVideo(videoCreateDto);
         
         return createVideoResult;
     }

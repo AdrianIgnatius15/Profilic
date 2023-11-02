@@ -3,7 +3,7 @@ import { DatabaseConnection } from "../database/databaseConnection";
 import { mapper } from "./mapper-middleware";
 import VideoReadDto from "../models/dtos/videoReadDto";
 import Video from "../models/entities/video";
-import { VideoInput } from "../models/interfaces/video-input-output-model";
+import { Service } from "typedi";
 import { VideoCreateDto } from "../models/dtos/videoCreateDto";
 
 /**
@@ -18,6 +18,7 @@ import { VideoCreateDto } from "../models/dtos/videoCreateDto";
  * @author Adrian Joseph
  * @copyright all rights reserved.
  */
+@Service()
 export class InitialiseAppComponents {
 
     /**
@@ -66,6 +67,7 @@ export class InitialiseAppComponents {
      *  @copyright Rights reserved to the author.
      */
     public createMappingsForDtoAndEntity() : void {
+        createMap(mapper, VideoCreateDto, Video);
         createMap(mapper, Video, VideoReadDto);
     }
 }

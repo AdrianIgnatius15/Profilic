@@ -1,13 +1,14 @@
 import express, { Express, Request, Response }  from "express";
 import { appRouter } from "./app/controllers/routers/appRouter";
-import { InitialiseAppComponents } from "./app/config/initialiseAppComponents";
 import 'reflect-metadata';
+import { InitialiseAppComponents } from "./app/middlewares/initialiseAppComponents";
 
 export const app : Express = express();
 const initialiseDatabase = new InitialiseAppComponents();
 
 app.use(express.json())
 initialiseDatabase.initialiseDatabase();
+initialiseDatabase.createMappingsForDtoAndEntity();
 app.use("/api/v1", appRouter);
 
 app.use("/", (res: Response): void => {

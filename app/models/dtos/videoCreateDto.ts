@@ -2,17 +2,17 @@ import { AutoMap } from "@automapper/classes";
 
 export class VideoCreateDto {
     @AutoMap()
-    name: string = "";
+    declare name : string;
 
     @AutoMap()
-    date: Date = new Date();
+    date : Date = new Date();
 
     @AutoMap()
-    title : string = "";
+    declare title: string;
 
     @AutoMap()
-    description: string = "";
+    declare description: string;
 
     @AutoMap()
-    resolution: string = "";
+    declare resolution: string;
 }

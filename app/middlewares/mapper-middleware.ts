@@ -1,6 +1,5 @@
 import { createMapper } from "@automapper/core";
 import { sequelize } from "@automapper/sequelize";
-
 /**
  * ## Mapper
  * ### Mapper middleware which allows the whole REST API to map from entity to a data model

@@ -5,26 +5,22 @@ import { AutoMap } from "@automapper/classes";
 
 export default class Video extends Model<InferAttributes<Video>, InferCreationAttributes<Video>> {
     @AutoMap()
-    id: CreationOptional<number> = 0;
+    declare id: CreationOptional<number>;
 
     @AutoMap()
-    name : string = "";
+    declare name : string;
 
     @AutoMap()
     date : Date = new Date();
 
     @AutoMap()
-    title: string = "";
+    declare title: string;
 
     @AutoMap()
-    description: string = "";
+    declare description: string;
 
     @AutoMap()
-    resolution: string = "";
-    readonly createdAt: Date = new Date();
-    readonly updatedAt: Date = new Date();
-    readonly deletedAt: Date = new Date();
-    version : number = 0;
+    declare resolution: string;
 }
 
 Video.initialize({
@@ -56,5 +52,5 @@ Video.initialize({
 }, {
     timestamps: true,
     sequelize: DatabaseConnection,
-    paranoid: true,
+    paranoid: true
 })
