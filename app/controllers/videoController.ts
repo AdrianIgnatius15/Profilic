@@ -1,31 +1,42 @@
 import { Request, Response, Router } from "express";
-import * as VideoRepositoryService from "../repositories/repository-service/videoRepositoryService";
-import { VideoInput, VideoOutput } from "../models/interfaces/video-input-output-model";
+import { Video } from "../models/video";
+import { IVideo } from "../models/interfaces/iVideo";
 
 export const VideoController : Router = Router();
 
-VideoController.post("/", async (request : Request<VideoInput>, response : Response<VideoOutput>) => {
+VideoController.post("/", async (request : Request, response : Response) => {
     // create a video, probably adding uploading as well
-    const requestBody = request.body as VideoOutput;
+    await Video.create({
+        name: request.body.name,
+        date: request.body.date,
+        description: request.body.description,
+        resolution: request.body.resolution,
+        title: request.body.title
+    });
 
-    const result = await VideoRepositoryService.createVideo(requestBody);
-    return response.status(204).send(result);
+    return response.status(204).send("created Video!");
 });
+
 VideoController.delete("/:id", async (request : Request, response : Response<boolean>) => {
     // create a video, probably adding uploading as well
-    const id = parseInt(request.params.id);
 
-    const result = await VideoRepositoryService.deleteVideoById(id);
-    return response.status(200).json(result);
 });
-VideoController.get("/:id", async (request : Request, response : Response<VideoOutput>) => {
+
+VideoController.get("/:id", async (request : Request, response : Response) => {
     // Update a video
-    const id : number = parseInt(request.params?.id);
-    const result = await VideoRepositoryService.getVideoById(id);
 
-    return response.status(200).json(result);
 });
+
 VideoController.put("/:id", () => {
     // create a video, probably adding uploading as well
     
+});
+
+VideoController.get('/:name', async (request : Request, response : Response<IVideo | string>) => {
+    if(request.params.name !== undefined || request.params.name !== "") {
+        return response.status(404).send("There is no name of the video you want to find");
+    } else {
+        // let video = new Video({});
+        // video.findVideoByName();
+    }
 });

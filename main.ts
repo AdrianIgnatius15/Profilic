@@ -3,10 +3,11 @@ import { appRouter } from "./app/controllers/routers/appRouter";
 import { InitialiseAppComponents } from "./app/config/initialiseAppComponents";
 
 export const app : Express = express();
-const initialiseDatabase = new InitialiseAppComponents();
+const intialiseAppComponents = new InitialiseAppComponents();
+const SERVER_PORT : number = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 1337;
 
 app.use(express.json())
-initialiseDatabase.initialiseDatabase();
+intialiseAppComponents.connectToMongoDB();
 app.use("/api/v1", appRouter);
 
 app.use("/", (res: Response): void => {
@@ -15,6 +16,6 @@ app.use("/", (res: Response): void => {
     });
 });
 
-app.listen(3000, () => {
-    console.log(`The server is up and live on port : ${3000}`);
+app.listen(SERVER_PORT, () => {
+    console.log(`The server is up and live on port : ${SERVER_PORT}`);
 });
