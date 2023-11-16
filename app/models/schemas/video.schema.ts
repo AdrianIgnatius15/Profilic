@@ -24,7 +24,3 @@ export const videoSchema = new Schema<IVideo, IVideoRepository>(
     //     }
     // }
 );
-
-videoSchema.static('findVideoByName', function findVideoByName(name: string) {
-    return this.where({ name: new RegExp(name, 'i') });
-});

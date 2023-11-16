@@ -1,5 +1,5 @@
 import { videoSchema } from '../models/schemas/video.schema';
 
-videoSchema.static('findVideoByName', function findVideoByName(name: string) {
-    return this.where({ name: new RegExp(name, 'i') });
+videoSchema.static('findVideoByDescription', function findVideoByDescription(description: string) {
+    return this.where({ description: new RegExp(description, 'i') });
 });
