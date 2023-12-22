@@ -1,25 +1,43 @@
 import { Request, Response, Router } from 'express';
 import { Video } from '../models/video';
-import Logging from '../utilities/Logging';
+import Logging from '../utilities/logging/Logging';
 import { Document } from 'mongoose';
 import { IVideo } from '../models/interfaces/iVideo';
 import { isNull, isUndefined } from 'lodash';
+import { TypedRequestBody } from '../utilities/request-body-models/typedRequestBody';
+import { multerMiddleware } from '../middlewares/multer-middleware';
+import { CloudinaryUploaderDownloaderService } from '../../services/cloudinaryUploaderDownloader.service';
+import Container from 'typedi';
 
 export const VideoController: Router = Router();
+const cloudinaryDownloaderUploader = Container.get(CloudinaryUploaderDownloaderService);
 
-VideoController.post('/', (request: Request<IVideo>, response: Response) => {
+VideoController.post('/uploadvideo', multerMiddleware.single('video'), (request: TypedRequestBody<IVideo>, response: Response<string | object>) => {
     // create a video, probably adding uploading as well
     (async () => {
-        await Video.create({
-            name: request.params.name,
-            date: request.params.date,
-            description: request.params.description,
-            resolution: request.params.resolution,
-            title: request.params.title
-        });
-    })();
+        if (request.file !== undefined && request.file.size > 0) {
+            const result = await cloudinaryDownloaderUploader.uploadVideo(request.file);
 
-    return response.status(204).send('created Video!');
+            if (result?.secure_url) {
+                await Video.create({
+                    name: request.body.name,
+                    date: request.body.date,
+                    description: request.body.description,
+                    resolution: request.body.resolution,
+                    title: request.body.title,
+                    url: result?.secure_url?.toString()
+                });
+
+                return response.status(204).send('Uploaded the video successfully🤘!');
+            } else if (result?.message) {
+                Logging.error(`Error occured when uploading the video due to ${result?.message}`);
+
+                return response.status(500).send({ error: result.message });
+            }
+        } else {
+            return response.status(500).send(`There is no video to upload! You may want to attach the video😀`);
+        }
+    })();
 });
 
 VideoController.delete('/:id', (request: Request, response: Response<boolean>) => {
